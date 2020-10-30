@@ -23,10 +23,8 @@ Route::get('/', function () {
 
 Auth::routes();
 
-Route::get('/projects', [ProjectsController::class, 'index'])->name('projects.index');
-Route::get('/projects/{project}', [ProjectsController::class, 'show'])->name('projects.show');
+Route::get('/projects', [ProjectsController::class, 'index'])->name('projects.index')->middleware('auth');
+Route::get('/projects/{project}', [ProjectsController::class, 'show'])->name('projects.show')->middleware('auth');
 Route::post('/projects',  [ProjectsController::class, 'store'])->middleware('auth');
-
-
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
