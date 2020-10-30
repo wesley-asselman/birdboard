@@ -1,5 +1,7 @@
 <?php
 
+
+
 namespace Tests\Feature;
 
 use Faker\Factory;
@@ -66,5 +68,11 @@ class ProjectsTest extends TestCase
         $this->post('projects', $attributes)->assertSessionHasErrors('description');
     }
 
+    public function a_project_requires_an_owner()
+    {        
+        $attributes = Project::factory()->raw();
+
+        $this->post('projects', $attributes)->assertRedirect('login');
+    }
 
 }
