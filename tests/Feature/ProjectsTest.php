@@ -82,6 +82,17 @@ class ProjectsTest extends TestCase
     }
 
     /** @test */
+    public function an_authenticated_user_cannot_view_anothers_projects()
+    {
+        $this->be(User::factory()->create());
+        
+        $project = Project::factory()->create();    
+        
+        $this->get($project->path())->assertStatus(403);
+
+    }
+
+    /** @test */
     public function a_project_requires_a_title()
     {
         $this->actingAs(User::factory()->create());
@@ -100,5 +111,12 @@ class ProjectsTest extends TestCase
         $this->post('projects', $attributes)->assertSessionHasErrors('description');
     }
 
+    /** @test */
+    public function a_project_belongs_to_an_owner()
+    {
+        $project = Project::factory()->create();    
+
+        $this->assertInstanceOf(User::class, $project->owner );
+    }
 
 }
