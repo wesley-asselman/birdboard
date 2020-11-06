@@ -26,37 +26,29 @@ class ProjectsTest extends TestCase
 
    
     /** @test */
-    public function guests_cannot_create_a_project()
-    {        
-
-        $this->get('projects')->assertRedirect('login');
-    }
-
-    /** @test */
-    public function guests_cannot_view_a_project()
-    {        
-        $attributes = Project::factory()->raw();
-
-        $this->post('projects', $attributes)->assertRedirect('login');
-    }
-
-            /** @test */
-    public function guests_cannot_view_a_single_project()
+    public function guests_cannot_manage_projects()
     {        
         $project = Project::factory()->create();
 
+        //show index
+        $this->get('projects')->assertRedirect('login');
+        //create page
+        $this->get('projects/create')->assertRedirect('login');
+        //create 
+        $this->post('/projects', $project->toarray())->assertRedirect('login');
+        //show single
         $this->get($project->path())->assertRedirect('login');
+
     }
-    
 
     /** @test */
 
     public function a_user_can_create_a_project()
     {
 
-        $this->withoutExceptionHandling();
-
         $this->actingAs(User::factory()->create());
+
+        $this->get('/projects/create')->assertStatus(200);
 
         $attributes = [
             'title' => $this->faker->sentence,
