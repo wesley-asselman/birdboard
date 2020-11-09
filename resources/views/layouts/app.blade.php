@@ -29,7 +29,7 @@
                     
                     <h1>
                         <a class="navbar-brand" href="{{ url('/') }}">
-                            <img src="img/logo.svg" alt="Birdboard">
+                            <img src="/img/logo.svg" alt="Birdboard">
                         </a>
                     </h1>
 
@@ -48,7 +48,7 @@
                             @endif
                             @else
                             <li class="nav-item dropdown">
-                                <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                                <a >
                                     {{ Auth::user()->name }}
                                 </a>
 
