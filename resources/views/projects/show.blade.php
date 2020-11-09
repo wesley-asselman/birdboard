@@ -15,18 +15,17 @@
         <div class="lg:flex -mx-3">
             <div class="lg:w-3/4 px-3 mb-6">
                 <div class="mb-8">
+                
                     <h2 class="text-lg text-gray-600 mb-3">Tasks</h2>
-
-                    <div class="card mb-3">Lorem Ipsum.</div>
-                    <div class="card mb-3">Lorem Ipsum.</div>
-                    <div class="card mb-3">Lorem Ipsum.</div>
-                    <div class="card ">Lorem Ipsum.</div>
+                    
+                    @foreach($project->tasks as $task)
+                        <div class="card mb-3"> {{ $task->body }} </div>
+                    @endforeach
 
                 </div>
                 <div>
                     <h2 class="text-lg text-gray-600 mb-3">General Notes</h2>
-
-                    <textarea class="card w-full" style="min-height:200px" >Lorem Ipsum.</textarea>
+                    <textarea class="card w-full" style="min-height:200px">Lorem Ipsum.</textarea>
                 </div>
 
             </div>

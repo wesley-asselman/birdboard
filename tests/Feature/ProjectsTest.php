@@ -46,7 +46,7 @@ class ProjectsTest extends TestCase
     public function a_user_can_create_a_project()
     {
 
-        $this->actingAs(User::factory()->create());
+        $this->signIn();
 
         $this->get('/projects/create')->assertStatus(200);
 
@@ -64,7 +64,7 @@ class ProjectsTest extends TestCase
     /** @test */
     public function a_user_can_view_their_project()
     {
-        $this->be(User::factory()->create());
+        $this->signIn();
         
         $project = Project::factory()->create(['owner_id' => auth()->id()]);        
 
@@ -76,7 +76,7 @@ class ProjectsTest extends TestCase
     /** @test */
     public function an_authenticated_user_cannot_view_anothers_projects()
     {
-        $this->be(User::factory()->create());
+        $this->signIn();
         
         $project = Project::factory()->create();    
         
@@ -87,7 +87,7 @@ class ProjectsTest extends TestCase
     /** @test */
     public function a_project_requires_a_title()
     {
-        $this->actingAs(User::factory()->create());
+        $this->signIn();
 
         $attributes = Project::factory()->raw(['title' => '']);
         $this->post('projects', $attributes)->assertSessionHasErrors('title');
@@ -96,7 +96,7 @@ class ProjectsTest extends TestCase
     /** @test */
     public function a_project_requires_a_description()
     {
-        $this->actingAs(User::factory()->create());
+        $this->signIn();
 
         $attributes = Project::factory()->raw(['description' => '']);
 
@@ -109,6 +109,20 @@ class ProjectsTest extends TestCase
         $project = Project::factory()->create();    
 
         $this->assertInstanceOf(User::class, $project->owner );
+    }
+
+    /** @test */
+    public function it_can_add_a_task()
+    {
+        
+        $project = Project::factory()->create();    
+        
+        $task = $project->addTask('Test Task');
+
+        $this->assertCount(1, $project->tasks);
+
+        $this->assertTrue($project->tasks->contains($task));
+
     }
 
 }
