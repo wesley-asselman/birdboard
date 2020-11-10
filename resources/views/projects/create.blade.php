@@ -17,7 +17,7 @@
         </div>
 
         <div>
-            <button type="submit">Create Project</button>
+            <button class="button" type="submit">Create Project</button>
             <a href="/projects">Cancel</a>
         </div>
     </form>
