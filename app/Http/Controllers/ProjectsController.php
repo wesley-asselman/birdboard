@@ -32,11 +32,26 @@ class ProjectsController extends Controller
 
     public function store()
     {
+
         $project = auth()->user()->projects()->create(request()->validate([
             'title'=> 'required', 
             'description'=> 'required',
+            'notes' => 'min:3',
         ]));
                 
+        return redirect($project->path());
+    }
+
+    public function update(Project $project)
+    {   
+        if(auth()->user()->isNot($project->owner)) {
+            abort(403);
+        }
+
+        request()->validate(['notes' => 'min:3']);
+
+        $project->update(request(['notes']));
+
         return redirect($project->path());
     }
 }
