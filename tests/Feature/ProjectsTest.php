@@ -5,11 +5,12 @@
 namespace Tests\Feature;
 
 use Faker\Factory;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
-use App\Models\Project;
 use App\Models\User;
+use App\Models\Project;
+use Facades\Tests\Setup\ProjectArranger;
+use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class ProjectsTest extends TestCase
 {
@@ -45,8 +46,6 @@ class ProjectsTest extends TestCase
 
     public function a_user_can_create_a_project()
     {
-        $this->withoutExceptionHandling();
-
         $this->signIn();
 
         $this->get('/projects/create')->assertStatus(200);
@@ -62,7 +61,6 @@ class ProjectsTest extends TestCase
 
         $response->assertRedirect($project->path());
         
-        $this->assertDatabaseHas('projects', $attributes);
 
         $this->get($project->path())
             ->assertSee($attributes['title'])
@@ -76,14 +74,13 @@ class ProjectsTest extends TestCase
     {
         $this->signIn();
         
-        $project = Project::factory()->create(['owner_id' => auth()->id()]);       
+        $project = ProjectArranger::create();
 
-        $this->patch($project->path(), [
-            'notes' => 'Changed',
-        ])
+        $this->actingAs($project->owner)
+        ->patch($project->path(), $attributes = ['notes' => 'Changed'])
         ->assertRedirect($project->path());
 
-        $this->assertDatabaseHas('projects', ['notes' => 'Changed']);
+        $this->assertDatabaseHas('projects', $attributes);
     }
     
     /** @test */
@@ -91,9 +88,9 @@ class ProjectsTest extends TestCase
     {
         $this->signIn();
         
-        $project = Project::factory()->create(['owner_id' => auth()->id()]);        
+        $project = ProjectArranger::create();
 
-        $this->get($project->path())
+        $this->actingAs($project->owner)->get($project->path())
             ->assertSee($project->title)
             ->assertSee($project->description);
     }
@@ -116,7 +113,7 @@ class ProjectsTest extends TestCase
         
         $project = Project::factory()->create();    
         
-        $this->patch($project->path(), [])->assertStatus(403);
+        $this->patch($project->path())->assertStatus(403);
 
     }
 
