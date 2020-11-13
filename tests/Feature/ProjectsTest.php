@@ -52,10 +52,13 @@ class ProjectsTest extends TestCase
 
         $attributes = [
             'title' => $this->faker->sentence,
-            'description' => $this->faker->paragraph,
+            'description' => $this->faker->sentence,
         ];
-        $this->post('/projects', $attributes)->assertRedirect('/projects');
+        $request = $this->post('/projects', $attributes);
+        $project = Project::where($attributes)->first();
 
+        $request->assertRedirect($project->path());
+        
         $this->assertDatabaseHas('projects', $attributes);
 
         $this->get('/projects')->assertSee($attributes['title']);

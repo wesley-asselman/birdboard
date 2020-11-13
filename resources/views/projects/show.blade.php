@@ -2,42 +2,51 @@
 
 @section('content')
 
-    <header class="flex items-center mb-3 py-4">
-        <div class="flex justify-between items-end w-full">
-            <p class="text-gray-600">
-                <a href="/projects"> My Projects </a> / {{ $project->title }}
-            </p>
-            <a href="/projects/create" class="button">New Project</a>
-        </div>
-    </header>
+<header class="flex items-center mb-3 py-4">
+    <div class="flex justify-between items-end w-full">
+        <p class="text-gray-600">
+            <a href="/projects"> My Projects </a> / {{ $project->title }}
+        </p>
+        <a href="/projects/create" class="button">New Project</a>
+    </div>
+</header>
 
-    <main>
-        <div class="lg:flex -mx-3">
-            <div class="lg:w-3/4 px-3 mb-6">
-                <div class="mb-8">
-                
-                    <h2 class="text-lg text-gray-600 mb-3">Tasks</h2>
-                    
-                    @foreach($project->tasks as $task)
-                        <div class="card mb-3"> {{ $task->body }} </div>
-                    @endforeach
+<main>
+    <div class="lg:flex -mx-3">
+        <div class="lg:w-3/4 px-3 mb-6">
+            <div class="mb-8">
+
+                <h2 class="text-lg text-gray-600 mb-3">Tasks</h2>
+
+                @foreach($project->tasks as $task)
                     <div class="card mb-3">
-                        <form action=" {{ $project->path() . '/tasks' }} " method="POST">
-                        @csrf
-                            <input placeholder="Add a new task" class="w-full" name="body">
-                        </form>
-                    </div>
-                </div>
-                <div>
-                    <h2 class="text-lg text-gray-600 mb-3">General Notes</h2>
-                    <textarea class="card w-full" style="min-height:200px">Lorem Ipsum.</textarea>
-                </div>
+                        <form method="POST" action="{{ $task->path() }}">
+                            @method('PATCH')
+                            @csrf
 
+                            <div class="flex" >
+                                <input type="text" value="{{ $task->body }}" name="body" class="w-full {{ $task->completed ? 'text-gray-400' : ''  }}" >
+                                <input name="completed" type="checkbox" onchange="this.form.submit()" {{ $task->completed ? 'checked' : '' }}>
+                            </div>
+                        </form>
+                     </div>
+                @endforeach
+                <div class="card mb-3">
+                    <form action=" {{ $project->path() . '/tasks' }} " method="POST">
+                        @csrf
+                        <input placeholder="Add a new task" class="w-full" name="body">
+                    </form>
+                </div>
             </div>
-            <div class="lg:w-1/4">
-                @include('projects.card')
+            <div>
+                <h2 class="text-lg text-gray-600 mb-3">General Notes</h2>
+                <textarea class="card w-full" style="min-height:200px">Lorem Ipsum.</textarea>
             </div>
         </div>
-    </main> 
+        <div class="lg:w-1/4">
+            @include('projects.card')
+        </div>
+    </div>
+</main>
 
 @endsection
