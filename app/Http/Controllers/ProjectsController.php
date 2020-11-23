@@ -42,15 +42,24 @@ class ProjectsController extends Controller
         return redirect($project->path());
     }
 
+    public function edit(Project $project)
+    {  
+        return view('projects.edit', compact('project'));
+    }
+
     public function update(Project $project)
     {   
         if(auth()->user()->isNot($project->owner)) {
             abort(403);
         }
 
-        request()->validate(['notes' => 'min:3']);
+        $attributes = request()->validate([
+            'title'=> 'required', 
+            'description'=> 'required',
+            'notes' => 'min:3',
+        ]);
 
-        $project->update(request(['notes']));
+        $project->update($attributes);
 
         return redirect($project->path());
     }

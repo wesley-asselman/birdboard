@@ -19,7 +19,7 @@ class ProjectTasksTest extends TestCase
         $project = ProjectArranger::create();
 
         $this->actingas($project->owner)
-        ->post($project->path() . '/tasks' , ['body' => 'Test Task']);
+            ->post($project->path() . '/tasks' , ['body' => 'Test Task']);
 
         $this->get($project->path())
             ->assertSee('Test Task');
