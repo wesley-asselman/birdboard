@@ -1,12 +1,12 @@
 <?php
 
 use App\Models\Project;
+use App\Models\Activity;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProjectsController;
 use App\Http\Controllers\ProjectTasksController;
-
 
 /*
 |--------------------------------------------------------------------------
