@@ -1,0 +1,1 @@
+{{ $project->owner->name }} completed the project

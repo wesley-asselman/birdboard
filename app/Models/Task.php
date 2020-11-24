@@ -22,7 +22,6 @@ class Task extends Model
         $this->update(['completed' => true]);
 
         $this->project->recordActivity('completed_task');
-
     }
 
     public function incomplete()
@@ -30,7 +29,6 @@ class Task extends Model
         $this->update(['completed' => false]);
 
         $this->project->recordActivity('incompleted_task');
-
     }
 
     public function project()
